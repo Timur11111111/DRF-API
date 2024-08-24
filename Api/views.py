@@ -6,9 +6,20 @@ from .serializers import peopleSerializer
 from .models import people
 
 class peopleAPIView(APIView):
+    queryset = people.objects.all()
     serializer_class = peopleSerializer
     def get(self, request):
         events = people.objects.all()
-        serializer = peopleSerializer(events, many=True, context={'request': request} )
+        serializer = peopleSerializer(events, many=True, context={'request': request})
         return Response(serializer.data, status=status.HTTP_200_OK)
-# Create your views here.
+
+    def post(self, request):
+        serializer = peopleSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+   
+    def post(self, request):
+        serializer = peopleSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)     
